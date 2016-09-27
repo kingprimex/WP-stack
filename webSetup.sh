@@ -33,7 +33,7 @@ echo "127.0.0.1 $siteName" >> /etc/hosts
 
 nginxRoot="/usr/share/nginx/html/$siteName"
 nginxConf="server { \n
-        listen 80 default_server;\n
+        listen 80;\n
         root /usr/share/nginx/html/$siteName;\n
         index index.html index.htm;\n
 
@@ -53,8 +53,9 @@ PASSWDDB="$(openssl rand -base64 12)"
 
 mainDB="$siteName"_db
 mainDB_user="$siteName"_user
-mysql --pasword=$rootpass -e "CREATE DATABASE $mainDB"
-mysql --password=$rootpass -e "GRANT ALL PRIVILEGES ON $mainDB.* TO $mainDB_user@localhost IDENTIFIED BY '$PASSWDDB'"
+mysql -uroot --password=${rootpass} -e "CREATE DATABASE \`$mainDB\`"
+mysql -uroot --password=${rootpass} -e "CREATE USER \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
+mysql -uroot --password=${rootpass} -e "GRANT ALL PRIVILEGES ON \`$mainDB\`.* TO \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
 
 wp_conf="define( 'DB_NAME', '"$mainDB"' );\n
 
@@ -67,4 +68,4 @@ define( 'DB_HOST', 'localhost' );\n"
 `mv /usr/share/nginx/html/$siteName/wp-config-sample.php /usr/share/nginx/html/$siteName/wp-config.php && echo -e $wp_conf >> /usr/share/nginx/html/$siteName/wp-config.php`
 
 
-`/etc/nginx/sbin/nginx -s reload`
+`/usr/sbin/nginx -s reload`
