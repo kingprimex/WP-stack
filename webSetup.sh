@@ -23,7 +23,7 @@ fi
 if [ "$PHP" == "" ]
 then
 
-`apt-get install -y php5 php5-mysql php5-dev php5-curl php5-common`
+`apt-get install -y php5 php5-mysql php5-dev php5-curl php5-common php5-fpm`
 
 fi
 
@@ -33,14 +33,22 @@ echo "127.0.0.1 $siteName" >> /etc/hosts
 
 nginxRoot="/usr/share/nginx/html/$siteName"
 nginxConf="server { \n
+	\n
         listen 80;\n
         root /usr/share/nginx/html/$siteName;\n
-        index index.html index.htm;\n
-
+        index index.php index.html index.htm;\n
         server_name $siteName;\n
-
+	\n
         location / {\n
-                try_files \$uri \$uri/ =404;\n
+        	try_files $uri $uri/ /index.php?q=$uri&$args;
+	}\n
+	\n
+	location ~ \.php$ {\n
+                try_files $uri =404;\n
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;\n
+                fastcgi_pass unix:/var/run/php5-fpm.sock;\n
+                fastcgi_index index.php;\n
+                include fastcgi_params;\n
         }\n
 }\n"
 
