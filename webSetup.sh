@@ -57,15 +57,17 @@ mysql -uroot --password=${rootpass} -e "CREATE DATABASE \`$mainDB\`"
 mysql -uroot --password=${rootpass} -e "CREATE USER \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
 mysql -uroot --password=${rootpass} -e "GRANT ALL PRIVILEGES ON \`$mainDB\`.* TO \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
 
-wp_conf="define( 'DB_NAME', '"$mainDB"' );\n
 
-define( 'DB_USER', '"$mainDB_user"' );\n
+db_old="define('DB_NAME', 'database_name_here');"
+user_old="define('DB_USER', 'username_here');"
+passwd_old="define('DB_PASSWORD', 'password_here');"
 
-define( 'DB_PASSWORD', '"$PASSWDDB"' );\n
+db_new="define( 'DB_NAME', '"$mainDB"' );"
+user_new="define( 'DB_USER', '"$mainDB_user"' );"
+passwd_new="define( 'DB_PASSWORD', '"$PASSWDDB"' );"
 
-define( 'DB_HOST', 'localhost' );\n"
 
-`mv /usr/share/nginx/html/$siteName/wp-config-sample.php /usr/share/nginx/html/$siteName/wp-config.php && echo -e $wp_conf >> /usr/share/nginx/html/$siteName/wp-config.php`
+`sed -i  -e "s/$db_old/$db_new/" -e "s/$user_old/$user_new/" -e "s/$passwd_old/$passwd_new/" ""$nginxRoot"/wp-config-sample.php" && mv ""$nginxRoot"/wp-config-sample.php" ""$nginxRoot"/wp-config.php"`
 
 
 `/usr/sbin/nginx -s reload`
