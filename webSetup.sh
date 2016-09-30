@@ -9,7 +9,7 @@ PHP=$(dpkg -l | grep php-fpm)
 if [ -z "$MYSQL" ]
 then
 
-`apt-get install -y mysql-server`
+`apt-get install -y python3 mysql-server`
 
 fi
 
