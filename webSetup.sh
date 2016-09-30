@@ -6,21 +6,21 @@ PHP=$(dpkg -l | grep php-fpm)
 
 
 
-if [ "$MYSQL" == "" ]
+if [ -z "$MYSQL" ]
 then
 
 `apt-get install -y mysql-server`
 
 fi
 
-if [ "$NGINX" == "" ]
+if [ -z "$NGINX" ]
 then
 
 `apt-get install -y nginx`
 
 fi
 
-if [ "$PHP" == "" ]
+if [ -z "$PHP" ]
 then
 
 `apt-get install -y php-fpm php-mysql`
