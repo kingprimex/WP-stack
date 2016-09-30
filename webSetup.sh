@@ -2,7 +2,7 @@
 
 MYSQL=$(dpkg -l | grep mysql-server)
 NGINX=$(dpkg -l | grep nginx)
-PHP=$(dpkg -l | grep php5)
+PHP=$(dpkg -l | grep php-fpm)
 
 
 
@@ -23,7 +23,7 @@ fi
 if [ "$PHP" == "" ]
 then
 
-`apt-get install -y php5 php5-mysql php5-dev php5-curl php5-common php5-fpm`
+`apt-get install -y php-fpm php-mysql`
 
 fi
 
