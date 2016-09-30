@@ -10,7 +10,7 @@ if [ -z "$MYSQL" ]
 then
 
 echo "Installing Mysql Server" 
-`apt-get install -y python3 mysql-server |  debconf-apt-progress`
+`apt-get install -y python3 mysql-server`
 echo "Mysql Server has been installed"
 /etc/init.d/mysql start
 
@@ -20,7 +20,7 @@ if [ -z "$NGINX" ]
 then
 
 echo "Installing NGINX Server"
-`apt-get install -y nginx | debconf-apt-progress`
+`apt-get install -y nginx`
 echo "Installed NGINX Server"
 /etc/init.d/nginx start
 
@@ -30,7 +30,7 @@ if [ -z "$PHP" ]
 then
 
 echo "Installing PHP Server"
-`apt-get install -y php-fpm php-mysql |  debconf-apt-progress`
+`apt-get install -y php-fpm php-mysql`
 echo "Installed PHP Server"
 /etc/init.d/php-fpm start
 
@@ -53,11 +53,11 @@ nginxConf="server { \n
  	access_log logs/$nginxVHaccess;
         error_log logs/$nginxVHerror error;
         location / {\n
-        	try_files $uri $uri/ /index.php?q=$uri&$args;
+        	try_files \$uri \$uri/ /index.php?q=\$uri&\$args;
 	}\n
 	\n
 	location ~ \.php$ {\n
-                try_files $uri =404;\n
+                try_files \$uri =404;\n
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;\n
                 fastcgi_pass unix:/var/run/php5-fpm.sock;\n
                 fastcgi_index index.php;\n
