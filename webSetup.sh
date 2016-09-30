@@ -10,7 +10,7 @@ if [ -z "$MYSQL" ]
 then
 
 echo "Installing Mysql Server" 
-`apt-get install -y python3 mysql-server`
+`DEBIAN_FRONTEND=noninteractive apt-get install -y python3 mysql-server`
 echo "Mysql Server has been installed"
 /etc/init.d/mysql start
 
@@ -32,7 +32,7 @@ then
 echo "Installing PHP Server"
 `apt-get install -y php-fpm php-mysql`
 echo "Installed PHP Server"
-/etc/init.d/php7-fpm start
+/etc/init.d/php7.0-fpm start
 
 fi
 
@@ -74,9 +74,13 @@ PASSWDDB="$(openssl rand -base64 12)"
 
 mainDB="$siteName"_db
 mainDB_user="$siteName"_user
-mysql -uroot --password=${rootpass} -e "CREATE DATABASE \`$mainDB\`"
-mysql -uroot --password=${rootpass} -e "CREATE USER \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
-mysql -uroot --password=${rootpass} -e "GRANT ALL PRIVILEGES ON \`$mainDB\`.* TO \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
+#mysql -uroot --password=${rootpass} -e "CREATE DATABASE \`$mainDB\`"
+#mysql -uroot --password=${rootpass} -e "CREATE USER \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
+#mysql -uroot --password=${rootpass} -e "GRANT ALL PRIVILEGES ON \`$mainDB\`.* TO \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
+
+mysql -e "CREATE DATABASE \`$mainDB\`"
+mysql -e "CREATE USER \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
+mysql -e "GRANT ALL PRIVILEGES ON \`$mainDB\`.* TO \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
 
 
 db_old="define('DB_NAME', 'database_name_here');"
