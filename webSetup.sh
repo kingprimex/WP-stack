@@ -56,13 +56,6 @@ nginxConf="server { \n
         	try_files \$uri \$uri/ /index.php?q=\$uri&\$args;\n
 	}\n
 	\n
-	#location ~ \.php$ {\n
-        #        try_files \$uri =404;\n
-        #        fastcgi_split_path_info ^(.+\.php)(/.+)$;\n
-        #        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;\n
-        #        fastcgi_index index.php;\n
-        #        include fastcgi_params;\n
-        #}\n
 	
 	location ~ \.php$ {\n
         include snippets/fastcgi-php.conf;\n
@@ -75,14 +68,10 @@ nginxConf="server { \n
 
 `wget -O /tmp/wordpress.zip https://wordpress.org/latest.zip && unzip -q /tmp/wordpress.zip -d  /tmp/ && mv /tmp/wordpress /usr/share/nginx/html/$siteName`
 
-#read -p "Please enter your Mysql password: " rootpass
 PASSWDDB="$(openssl rand -base64 12)"
 
 mainDB="$siteName"_db
 mainDB_user="$siteName"_user
-#mysql -uroot --password=${rootpass} -e "CREATE DATABASE \`$mainDB\`"
-#mysql -uroot --password=${rootpass} -e "CREATE USER \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
-#mysql -uroot --password=${rootpass} -e "GRANT ALL PRIVILEGES ON \`$mainDB\`.* TO \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
 
 mysql -e "CREATE DATABASE \`$mainDB\`"
 mysql -e "CREATE USER \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
