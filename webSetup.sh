@@ -56,13 +56,19 @@ nginxConf="server { \n
         	try_files \$uri \$uri/ /index.php?q=\$uri&\$args;\n
 	}\n
 	\n
+	#location ~ \.php$ {\n
+        #        try_files \$uri =404;\n
+        #        fastcgi_split_path_info ^(.+\.php)(/.+)$;\n
+        #        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;\n
+        #        fastcgi_index index.php;\n
+        #        include fastcgi_params;\n
+        #}\n
+	
 	location ~ \.php$ {\n
-                try_files \$uri =404;\n
-                fastcgi_split_path_info ^(.+\.php)(/.+)$;\n
-                fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;\n
-                fastcgi_index index.php;\n
-                include fastcgi_params;\n
-        }\n
+        include snippets/fastcgi-php.conf;\n
+        fastcgi_pass unix:/run/php/php7.0-fpm.sock;\n
+    }
+
 }\n"
 
 `touch /etc/nginx/sites-available/$siteName.conf && echo -e $nginxConf >> /etc/nginx/sites-available/$siteName.conf && ln -s /etc/nginx/sites-available/$siteName.conf /etc/nginx/sites-enabled/$siteName.conf`
