@@ -69,7 +69,7 @@ nginxConf="server { \n
 
 `wget -O /tmp/wordpress.zip https://wordpress.org/latest.zip && unzip -q /tmp/wordpress.zip -d  /tmp/ && mv /tmp/wordpress /usr/share/nginx/html/$siteName`
 
-read -p "Please enter your Mysql password: " rootpass
+#read -p "Please enter your Mysql password: " rootpass
 PASSWDDB="$(openssl rand -base64 12)"
 
 mainDB="$siteName"_db
