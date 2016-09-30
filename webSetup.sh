@@ -81,7 +81,7 @@ mainDB_user="$siteName"_user
 mysql -e "CREATE DATABASE \`$mainDB\`"
 mysql -e "CREATE USER \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
 mysql -e "GRANT ALL PRIVILEGES ON \`$mainDB\`.* TO \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
-
+mysql -e "FLUSH PRIVILEGES"
 
 db_old="define('DB_NAME', 'database_name_here');"
 user_old="define('DB_USER', 'username_here');"
