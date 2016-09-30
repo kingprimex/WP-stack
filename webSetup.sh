@@ -32,7 +32,7 @@ then
 echo "Installing PHP Server"
 `apt-get install -y php-fpm php-mysql`
 echo "Installed PHP Server"
-/etc/init.d/php-fpm start
+/etc/init.d/php7-fpm start
 
 fi
 
@@ -59,7 +59,7 @@ nginxConf="server { \n
 	location ~ \.php$ {\n
                 try_files \$uri =404;\n
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;\n
-                fastcgi_pass unix:/var/run/php5-fpm.sock;\n
+                fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;\n
                 fastcgi_index index.php;\n
                 include fastcgi_params;\n
         }\n
