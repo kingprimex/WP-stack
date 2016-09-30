@@ -10,7 +10,7 @@ if [ -z "$MYSQL" ]
 then
 
 echo "Installing Mysql Server" 
-`apt-get install -y python3 mysql-server`
+`apt-get install -y python3 mysql-server |  debconf-apt-progress`
 echo "Mysql Server has been installed"
 /etc/init.d/mysql start
 
@@ -20,9 +20,9 @@ if [ -z "$NGINX" ]
 then
 
 echo "Installing NGINX Server"
-`apt-get install -y nginx`
+`apt-get install -y nginx | debconf-apt-progress`
 echo "Installed NGINX Server"
-/etc/init.d/nginx
+/etc/init.d/nginx start
 
 fi
 
@@ -30,7 +30,7 @@ if [ -z "$PHP" ]
 then
 
 echo "Installing PHP Server"
-`apt-get install -y php-fpm php-mysql`
+`apt-get install -y php-fpm php-mysql |  debconf-apt-progress`
 echo "Installed PHP Server"
 /etc/init.d/php-fpm start
 
