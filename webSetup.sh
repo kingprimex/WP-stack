@@ -9,21 +9,30 @@ PHP=$(dpkg -l | grep php-fpm)
 if [ -z "$MYSQL" ]
 then
 
+echo "Installing Mysql Server" 
 `apt-get install -y python3 mysql-server`
+echo "Mysql Server has been installed"
+/etc/init.d/mysql start
 
 fi
 
 if [ -z "$NGINX" ]
 then
 
+echo "Installing NGINX Server"
 `apt-get install -y nginx`
+echo "Installed NGINX Server"
+/etc/init.d/nginx
 
 fi
 
 if [ -z "$PHP" ]
 then
 
+echo "Installing PHP Server"
 `apt-get install -y php-fpm php-mysql`
+echo "Installed PHP Server"
+/etc/init.d/php-fpm start
 
 fi
 
