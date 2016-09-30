@@ -32,6 +32,8 @@ read -p "Please enter your site name: " siteName
 echo "127.0.0.1 $siteName" >> /etc/hosts
 
 nginxRoot="/usr/share/nginx/html/$siteName"
+nginxVHerror="$siteName".error;
+nginxVHaccess="$siteName".access;
 nginxConf="server { \n
 	\n
         listen 80;\n
@@ -39,6 +41,8 @@ nginxConf="server { \n
         index index.php index.html index.htm;\n
         server_name $siteName;\n
 	\n
+ 	access_log logs/$nginxVHaccess;
+        error_log logs/$nginxVHerror error;
         location / {\n
         	try_files $uri $uri/ /index.php?q=$uri&$args;
 	}\n
