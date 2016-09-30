@@ -50,8 +50,8 @@ nginxConf="server { \n
         index index.php index.html index.htm;\n
         server_name $siteName;\n
 	\n
- 	access_log /var/logs/nginx/$nginxVHaccess;\n
-        error_log /var/logs/nginx/$nginxVHerror error;\n
+ 	access_log /var/log/nginx/$nginxVHaccess;\n
+        error_log /var/log/nginx/$nginxVHerror error;\n
         location / {\n
         	try_files \$uri \$uri/ /index.php?q=\$uri&\$args;\n
 	}\n
