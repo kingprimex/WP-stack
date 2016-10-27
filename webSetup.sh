@@ -58,6 +58,7 @@ nginxConf="server { \n
 	\n
 	
 	location ~ \.php$ {\n
+	try_files \$uri=404;\n
         include snippets/fastcgi-php.conf;\n
         fastcgi_pass unix:/run/php/php7.0-fpm.sock;\n
     }
