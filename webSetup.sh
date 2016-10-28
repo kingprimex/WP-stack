@@ -1,5 +1,12 @@
 #!/bin/bash
 
+
+if ($# -ne 2) 
+then
+	`echo please enter your desired site name`
+fi
+siteName=$2
+
 MYSQL=$(dpkg -l | grep mysql-server)
 NGINX=$(dpkg -l | grep nginx)
 PHP=$(dpkg -l | grep php-fpm)
@@ -42,7 +49,7 @@ echo "Installing PHP Server"
 echo "Installed PHP Server"
 fi
 
-read -p "Please enter your site name: " siteName
+#read -p "Please enter your site name: " siteName
 
 echo "127.0.0.1 $siteName" >> /etc/hosts
 
