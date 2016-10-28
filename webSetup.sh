@@ -4,13 +4,21 @@ MYSQL=$(dpkg -l | grep mysql-server)
 NGINX=$(dpkg -l | grep nginx)
 PHP=$(dpkg -l | grep php-fpm)
 
+MYSQLPASS="wp123"
+MYSQLDATABASE="wordpress"
+SERVERNAMEORIP="example.com"
+
+#you may need to enter a password for mysql-server
+sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password ${MYSQLPASS}"
+sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password ${MYSQLPASS}"
+
 
 
 if [ -z "$MYSQL" ]
 then
 
 echo "Installing Mysql Server" 
-`DEBIAN_FRONTEND=noninteractive apt-get install -y python3 mysql-server`
+`apt-get install -y python3 mariadb-server mariadb-client`
 echo "Mysql Server has been installed"
 /etc/init.d/mysql start
 
@@ -32,8 +40,6 @@ then
 echo "Installing PHP Server"
 `apt-get install -y php-fpm php-mysql`
 echo "Installed PHP Server"
-/etc/init.d/php7.0-fpm start
-
 fi
 
 read -p "Please enter your site name: " siteName
@@ -65,6 +71,15 @@ nginxConf="server { \n
 
 }\n"
 
+
+sed -i "s/^;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
+sed -i "s/^;listen.owner = www-data/listen.owner = www-data/" /etc/php5/fpm/pool.d/www.conf
+sed -i "s/^;listen.group = www-data/listen.group = www-data/" /etc/php5/fpm/pool.d/www.conf
+sed -i "s/^;listen.mode = 0660/listen.mode = 0660/" /etc/php5/fpm/pool.d/www.conf
+
+/etc/init.d/php7.0-fpm start
+
+
 `touch /etc/nginx/sites-available/$siteName.conf && echo -e $nginxConf >> /etc/nginx/sites-available/$siteName.conf && ln -s /etc/nginx/sites-available/$siteName.conf /etc/nginx/sites-enabled/$siteName.conf`
 
 `wget -O /tmp/wordpress.zip https://wordpress.org/latest.zip && unzip -q /tmp/wordpress.zip -d  /tmp/ && mv /tmp/wordpress /usr/share/nginx/html/$siteName`
@@ -74,10 +89,10 @@ PASSWDDB="$(openssl rand -base64 12)"
 mainDB="$siteName"_db
 mainDB_user="$siteName"_user
 
-mysql -e "CREATE DATABASE \`$mainDB\`"
-mysql -e "CREATE USER \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
-mysql -e "GRANT ALL PRIVILEGES ON \`$mainDB\`.* TO \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
-mysql -e "FLUSH PRIVILEGES"
+mysql -uroot -p$MYSQLPASS -e "CREATE DATABASE \`$mainDB\`"
+mysql -uroot -p$MYSQLPASS -e "CREATE USER \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
+mysql -uroot -p$MYSQLPASS -e "GRANT ALL PRIVILEGES ON \`$mainDB\`.* TO \`$mainDB_user\`@localhost IDENTIFIED BY '$PASSWDDB'"
+mysql -uroot -p$MYSQLPASS -e "FLUSH PRIVILEGES"
 
 db_old="define('DB_NAME', 'database_name_here');"
 user_old="define('DB_USER', 'username_here');"
