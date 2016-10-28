@@ -4,6 +4,7 @@
 if ($# -ne 2) 
 then
 	`echo please enter your desired site name`
+	exit 0
 fi
 siteName=$2
 
