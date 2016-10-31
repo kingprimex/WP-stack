@@ -9,7 +9,7 @@ fi
 
 siteName=$1
 
-MYSQL=$(dpkg -l | grep mysql-server)
+MYSQL=$(dpkg -l | grep mariadb-server)
 NGINX=$(dpkg -l | grep nginx)
 PHP=$(dpkg -l | grep php-fpm)
 
@@ -28,8 +28,8 @@ then
 
 echo "Installing Mysql Server" 
 `apt-get install -y python3 mariadb-server mariadb-client`
-echo "Mysql Server has been installed"
 /etc/init.d/mysql start
+echo "Mysql Server has been installed and started"
 
 fi
 
@@ -38,9 +38,9 @@ then
 
 echo "Installing NGINX Server"
 `apt-get install -y nginx`
-echo "Installed NGINX Server"
 /etc/init.d/nginx start
 
+echo "Installed NGINX Server and started"
 fi
 
 if [ -z "$PHP" ]
