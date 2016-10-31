@@ -1,11 +1,12 @@
 #!/bin/bash
 
 
-if ($# -ne 2) 
+if [ "$#" -ne 2 ] 
 then
-	`echo please enter your desired site name`
-	exit 0
+	`echo Illegal number of arguments: \nUSAGE: path/to/script siteName`
+	exit 1
 fi
+
 siteName=$2
 
 MYSQL=$(dpkg -l | grep mysql-server)
@@ -17,8 +18,8 @@ MYSQLDATABASE="wordpress"
 SERVERNAMEORIP="example.com"
 
 #you may need to enter a password for mysql-server
-sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password ${MYSQLPASS}"
-sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password ${MYSQLPASS}"
+ debconf-set-selections <<< "mysql-server mysql-server/root_password password ${MYSQLPASS}"
+ debconf-set-selections <<< "mysql-server mysql-server/root_password_again password ${MYSQLPASS}"
 
 
 
@@ -80,10 +81,10 @@ nginxConf="server { \n
 }\n"
 
 
-sed -i "s/^;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
-sed -i "s/^;listen.owner = www-data/listen.owner = www-data/" /etc/php5/fpm/pool.d/www.conf
-sed -i "s/^;listen.group = www-data/listen.group = www-data/" /etc/php5/fpm/pool.d/www.conf
-sed -i "s/^;listen.mode = 0660/listen.mode = 0660/" /etc/php5/fpm/pool.d/www.conf
+sed -i "s/^;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/"  /etc/php/7.0/fpm/php.ini 
+sed -i "s/^;listen.owner = www-data/listen.owner = www-data/" /etc/php/7.0/fpm/pool.d/www.conf
+sed -i "s/^;listen.group = www-data/listen.group = www-data/" /etc/php/7.0/fpm/pool.d/www.conf
+sed -i "s/^;listen.mode = 0660/listen.mode = 0660/" /etc/php/7.0/fpm/pool.d/www.conf
 
 /etc/init.d/php7.0-fpm start
 
