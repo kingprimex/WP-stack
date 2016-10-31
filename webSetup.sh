@@ -1,13 +1,13 @@
 #!/bin/bash
 
 
-if [ "$#" -ne 2 ] 
+if [ "$#" -ne 1 ] 
 then
-	`echo Illegal number of arguments: \nUSAGE: path/to/script siteName`
+	echo -ne "Illegal number of arguments: USAGE: path/to/script siteName"
 	exit 1
 fi
 
-siteName=$2
+siteName=$1
 
 MYSQL=$(dpkg -l | grep mysql-server)
 NGINX=$(dpkg -l | grep nginx)
@@ -67,13 +67,13 @@ nginxConf="server { \n
 	\n
  	access_log /var/log/nginx/$nginxVHaccess;\n
         error_log /var/log/nginx/$nginxVHerror error;\n
-        location / {\n
-        	try_files \$uri \$uri/ /index.php?q=\$uri&\$args;\n
-	}\n
+       # location / {\n
+       # 	try_files \$uri \$uri/ /index.php?q=\$uri&\$args;\n
+	#}\n
 	\n
 	
 	location ~ \.php$ {\n
-	try_files \$uri=404;\n
+	#try_files \$uri =404;\n
         include snippets/fastcgi-php.conf;\n
         fastcgi_pass unix:/run/php/php7.0-fpm.sock;\n
     }
@@ -112,7 +112,7 @@ user_new="define( 'DB_USER', '"$mainDB_user"' );"
 passwd_new="define( 'DB_PASSWORD', '"$PASSWDDB"' );"
 
 
-`sed -i  -e "s/$db_old/$db_new/" -e "s/$user_old/$user_new/" -e "s/$passwd_old/$passwd_new/" ""$nginxRoot"/wp-config-sample.php" && mv ""$nginxRoot"/wp-config-sample.php" ""$nginxRoot"/wp-config.php"`
+`sed -i  -e "s/$db_old/$db_new/" -e "s/$user_old/$user_new/" -e "s/$passwd_old/$passwd_new/" "$nginxRoot/wp-config-sample.php" && mv "$nginxRoot/wp-config-sample.php" "$nginxRoot/wp-config.php"`
 
 
 `/usr/sbin/nginx -s reload`
